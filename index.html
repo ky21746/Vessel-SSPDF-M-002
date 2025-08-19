@@ -1,0 +1,394 @@
+
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דוח בקרת איכות - כלי שיט SSPDF-M 002</title>
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        .lang-en { display: none; }
+
+        .lang-switcher {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+        }
+        .lang-switcher button {
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid white;
+            color: white;
+            padding: 5px 10px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .lang-switcher button:hover, .lang-switcher button.active {
+            background-color: #1abc9c;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        header p {
+            margin: 5px 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        nav {
+            background-color: #34495e;
+            padding: 0.5rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #1abc9c;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .category {
+            margin-bottom: 3rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        .category h2 {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            padding: 1rem 1.5rem;
+            margin: 0;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        .item {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid #ecf0f1;
+            align-items: center;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .item-image img {
+            width: 100%;
+            border-radius: 6px;
+            background-color: #eee;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+        .item-details h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: white;
+            margin-top: 10px;
+        }
+        .status.done { background-color: #2ecc71; } /* Green */
+        .status.received { background-color: #3498db; } /* Blue */
+        .status.recommendation { background-color: #95a5a6; } /* Grey */
+
+        .appendix-content {
+            padding: 1.5rem;
+        }
+        .appendix-content h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        .appendix-content ul {
+            list-style-type: disc;
+            padding-right: 20px; /* For RTL */
+        }
+        html[dir="ltr"] .appendix-content ul {
+            padding-right: 0;
+            padding-left: 20px;
+        }
+        .appendix-content li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            background-color: #2c3e50;
+            color: #bdc3c7;
+        }
+
+        @media (max-width: 768px) {
+            .item, .appendix-content {
+                grid-template-columns: 1fr;
+            }
+            header h1 { font-size: 2rem; }
+            .lang-switcher {
+                position: static;
+                margin-bottom: 15px;
+            }
+            nav {
+                position: static;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0.5rem 0;
+            }
+            nav a {
+                margin: 5px 10px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="lang-switcher">
+            <button id="btn-he" class="active" onclick="switchLanguage('he')">עברית</button>
+            <button id="btn-en" onclick="switchLanguage('en')">English</button>
+        </div>
+        <h1>
+            <span class="lang-he">דוח בקרת איכות ונקודות לטיפול</span>
+            <span class="lang-en">Quality Assurance & Punch List Report</span>
+        </h1>
+        <p>
+            <span class="lang-he">פרויקט: כלי שיט SSPDF-M 002 | תאריך בדיקה: 29.07.2025 | תאריך הפקת דוח: 19.08.2025</span>
+            <span class="lang-en">Project: Vessel SSPDF-M 002 | Inspection Date: 29.07.2025 | Report Date: 19.08.2025</span>
+        </p>
+    </header>
+
+    <nav>
+        <a href="#cat1">
+            <span class="lang-he">שילוט ובטיחות</span>
+            <span class="lang-en">Labeling & Safety</span>
+        </a>
+        <a href="#cat2">
+            <span class="lang-he">ציוד ומכניקה</span>
+            <span class="lang-en">Equipment & Mechanical</span>
+        </a>
+        <a href="#cat3">
+            <span class="lang-he">חלפים ומלאי</span>
+            <span class="lang-en">Spares & Inventory</span>
+        </a>
+        <a href="#cat4">
+            <span class="lang-he">אביזרים</span>
+            <span class="lang-en">Accessories</span>
+        </a>
+        <a href="#cat5">
+            <span class="lang-he">נספח</span>
+            <span class="lang-en">Appendix</span>
+        </a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Category 1: Labeling & Safety -->
+        <section id="cat1" class="category">
+            <h2>
+                <span class="lang-he">1. שילוט, תוויות ובטיחות</span>
+                <span class="lang-en">1. Labeling & Safety</span>
+            </h2>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/v4dStxfQ/Screenshot-2025-08-19-at-19-18-12.png" alt="שסתום דלק"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">1.1 הוספת תווית "Cut off fuel"</span>
+                        <span class="lang-en">1.1 Add "Cut off fuel" Label</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש להוסיף תווית ברורה ליד שסתום ניתוק הדלק.</span>
+                        <span class="lang-en">A clear label should be added next to the fuel cut-off valve.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/XxPmj6r4/1-6.png" alt="מיכל דלק"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">1.2 סימון מיכלי דלק</span>
+                        <span class="lang-en">1.2 Fuel Tanks Marking</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש לסמן בבירור "FORWARD TANK" ו-"AFT TANK". להוסיף תוויות "NOT FOR STORAGE" על כל המיכלים.</span>
+                        <span class="lang-en">Clearly mark "FORWARD TANK" and "AFT TANK". Add "NOT FOR STORAGE" labels on all tanks.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/67SnRhxJ/1-4.png" alt="קונסולה"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">1.3 הוספת אזהרת אחסון בקונסולה</span>
+                        <span class="lang-en">1.3 Add Storage Warning on Console</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש להוסיף תווית ברורה על הקונסולה עם הכיתוב "Don't store equipment inside console" או ניסוח דומה.</span>
+                        <span class="lang-en">Add a clear label on the console: "Don't store equipment inside console" or similar.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/v4wxHpG7/1-5-STEP.png" alt="סיפון עליון"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">1.4 הוספת מדבקת "STEP"</span>
+                        <span class="lang-en">1.4 Add "STEP" Label</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש להדביק מדבקת Hypalon עם הכיתוב "STEP" על הסיפון העליון.</span>
+                        <span class="lang-en">A Hypalon decal with the text "STEP" should be applied to the upper deck.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/XxPmj6r4/1-6.png" alt="שילוט סוג דלק"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">1.5 הוספת סוג דלק</span>
+                        <span class="lang-en">1.5 Add Fuel Type</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש להוסיף תווית המציינת את סוג הדלק המדויק: "UNLEADED GASOLINE 95 ONLY".</span>
+                        <span class="lang-en">Add a label specifying the exact fuel type: "UNLEADED GASOLINE 95 ONLY".</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/Z6q30vG3/1-7-CE-PLATE.png" alt="לוחית נתונים"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">1.6 אישור לוחית נתונים (CE PLATE)</span>
+                        <span class="lang-en">1.6 CE Plate Approval</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש לשלוח את העיצוב של הלוחית לאישור סופי לפני ההדפסה.</span>
+                        <span class="lang-en">The plate design must be sent for final approval before printing.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category 2: Equipment & Mechanical -->
+        <section id="cat2" class="category">
+            <h2>
+                <span class="lang-he">2. ציוד, מכניקה והרכבה</span>
+                <span class="lang-en">2. Equipment & Mechanical</span>
+            </h2>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/M5fSzTqS/2-1.png" alt="ריפוד מושב"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">2.1 ריפוד גומי במושבים</span>
+                        <span class="lang-en">2.1 Rubber Padding in Seats</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש לוודא שבכל המושבים מותקן ריפוד גומי פנימי.</span>
+                        <span class="lang-en">Ensure all seats have internal rubber padding installed.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/4Zw7JYGJ/2-2.png" alt="הגה"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">2.2 החלפת סמל ההגה</span>
+                        <span class="lang-en">2.2 Replace Steering Wheel Emblem</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש להחליף את הסמל הנוכחי של "Sportis" באופציה אחרת.</span>
+                        <span class="lang-en">The current "Sportis" emblem should be replaced with another option.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img src="https://i.ibb.co/S4nryWMQ/2-3.png" alt="מוביל חבל"></div>
+                <div class="item-details">
+                    <h3>
+                        <span class="lang-he">2.3 התקנת "לידר" לחבל עוגן</span>
+                        <span class="lang-en">2.3 Install Anchor Rope Leader</span>
+                    </h3>
+                    <p>
+                        <span class="lang-he">יש להתקין מוביל חבל בחרטום להגנה על חבל העוגן.</span>
+                        <span class="lang-en">A rope leader should be installed at the bow to protect the anchor rope.</span>
+                    </p>
+                    <span class="status done">
+                        <span class="lang-he">טופל</span>
+                        <span class="lang-en">Completed</span>
+                    </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-image"><img sr
